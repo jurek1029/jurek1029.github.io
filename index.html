@@ -324,8 +324,8 @@
 					//console.log(dRolls,aRolls)
 					dRolls[0] += dPlus;
 					aRolls[0] += aPlus;
-					s += "ile walczy: " + fight + " wojska atk: " + attc + " wojska def: " + deff + "<br>"
-					s += "rzuty atk: " + aRolls + " rzuty def: " + dRolls + " <br>"  
+					h += "ile walczy: " + fight + " wojska atk: " + attc + " wojska def: " + deff + "<br>"
+					h += "rzuty atk: " + aRolls + " rzuty def: " + dRolls + " <br>"  
 
 					for(let i = 0; i < fight; i++){
 						if (dRolls[i] >= aRolls[i]){
@@ -341,6 +341,7 @@
 				}
 				
 				out.innerHTML = s;
+				document.getElementById("hist").innerHTML = h;
 			};
 		</script>
 	</body>
