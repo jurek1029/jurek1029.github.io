@@ -37,6 +37,7 @@
 			}	
 			.box {
 				background:linear-gradient(to bottom, RGBA(45, 171, 249, 0.3) 5%, RGBA(6, 136, 250, 0.3) 100%);
+				text-align: left;
 				border-radius:6px;
 				display:inline-block;
 				color:#ffffff;
@@ -75,8 +76,8 @@
 				display: inline-block;
 				font-size: 20px;
 				list-style-type: none;
-				padding: 1em;
-				text-transform: uppercase;
+				<!--padding: 1em;-->
+				<!--text-transform: uppercase;-->
 			}
 			li span {
 				display: block;
@@ -90,25 +91,65 @@
 			</div>
 		</div>
 	
-		<h1> <b>Stodo&#322;a Control Center 2.0</b></h1>
+		<h1> <b>Risk Dice Simulator</b></h1>
 		<br><br>
 		<div class="box">
-		Temperatura: <span id="temp">0</span>&deg;C <br>
-		Wilgotno&#347;&#263;: <span id="humi">0</span>% <br>
-		Heat Index: <span id="heatIndex">0</span>&deg;C 
+		<form id="form1">
 		<ul>
-			<li><span id="minutes"></span>Minutes</li>
-			<li><span id="seconds"></span>Seconds</li>
+		  <li style="width:8em">Attacker Units:</li>
+		  <li><input type="number" id="aUnits" style="width:40px" value="10"></li>
+		  <li>Attack Dice: <input type="checkbox" id="aDice"></li>
+		  <li>Airport: <input type="checkbox" id="aPlus"></li>	  
 		</ul>
-		Heating is <span id="heating">OFF</span>			
+		<ul>
+			<input type="radio" name="limit" checked="true" id="noLimit">
+			<li style="width:8em">No Limits:</li>
+		</ul>
+		<ul>
+			<input type="radio" name="limit" id="limitUpTo">
+			<li style="width:8em">Attacker Units limit UP TO:</li>
+			<li><input type="range" id="aUnitsLTOrange" style="width:150px" max="10" min="1"></li>
+			<li><input type="number" id="aUnitsLTO" style="width:40px"></li>
+		</ul>
+		<ul>
+			<input type="radio" name="limit" id="limitUse">
+			<li style="width:8em">Attacker Units limit TO USE:</li>
+			<li><input type="range" id="aUnitsLUrange" style="width:150px" max="10" min="1"></li>
+			<li><input type="number" id="aUnitsLU" style="width:40px"></li>
+			
+		</ul>
+		<br>
+		<ul>
+			<li style="width:8em">Deffender Units:</li>
+			<li><input type="number" id="dUnits" style="width:40px" value="10"></li>
+			<li>Defend Dice: <input type="checkbox" id="dDice"></li>
+			<li>Airport: <input type="checkbox" id="dPlus"></li>
+		</ul>
+		</form>		
 		</div>
 		<br>
 		<br>
-		<button class='button' onclick="sendData(1)"> Turn ON </button>
-		<br><br>
-		<button class='button' onclick="sendData(0)"> Turn OFF </button>
-		
-		<script>
+		<button class='button' onclick="sim()"> Simulate </button>
+		<br>
+		<br>
+		<div class="box">
+			<span id="out">Won</span>
+		</div>
+		<br>
+		<br>
+		<br>
+		<div class="box">
+		<img src="def0.png">
+		<br>
+		<img src="defADice.png">
+		<br>
+		<img src="defADiceAPlus.png">
+		<br>
+		<img src="defDice.png">
+		<br>
+		<img src="defDicePlus.png">
+		</div>
+		<script>		
 			var video = document.createElement('video');
 			var t = Math.floor(Math.random() * 1663);
 			video.src = "https://www.dropbox.com/s/9noro6gvmkvdohg/No-Audio.mp4?raw=1#t="+t;
@@ -118,67 +159,166 @@
 			video.loop = true;
 			
 			document.getElementById("vid").appendChild(video);
+					
 			
-			function sendData(led) {
-				var xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					  document.getElementById("heating").innerHTML = this.responseText;
-					}
-				};
-				xhttp.open("GET", "setHeat?state="+led, true);
-				xhttp.send();
-			}
+			document.getElementById("aUnits").addEventListener('input', function (evt) {
+				document.getElementById("aUnitsLTOrange").max = this.value;
+				document.getElementById("aUnitsLUrange").max = this.value;	
+			});
+			
+			document.getElementById("noLimit").addEventListener('input', function (evt) {
+				document.getElementById("aUnitsLTO").value = "";
+				document.getElementById("aUnitsLU").value = "";
+			});
+			
+			document.getElementById("limitUpTo").addEventListener('input', function (evt) {
+				document.getElementById("aUnitsLTO").value = 1;
+				document.getElementById("aUnitsLU").value = "";
+				document.getElementById("aUnitsLTOrange").value = 1;
+			});
+			
+			document.getElementById("limitUse").addEventListener('input', function (evt) {
+				document.getElementById("aUnitsLTO").value = "";
+				document.getElementById("aUnitsLU").value = document.getElementById("aUnits").value;
+				document.getElementById("aUnitsLUrange").value = document.getElementById("aUnits").value;
+			});
+			
+			
+			
+			document.getElementById("aUnitsLTOrange").addEventListener('input', function (evt) {
+				document.getElementById("aUnitsLTO").value = this.value;
+				document.getElementById("limitUpTo").checked = true;
+				document.getElementById("aUnitsLU").value = "";
+			});
+			
+			document.getElementById("aUnitsLUrange").addEventListener('input', function (evt) {
+				document.getElementById("aUnitsLU").value = this.value;
+				document.getElementById("aUnitsLTO").value = "";
+				document.getElementById("limitUse").checked = true;
+			});
+			
+			
+			document.getElementById("aUnitsLTO").addEventListener('input', function (evt) {
+				if ( parseInt(this.value) > parseInt(document.getElementById("aUnits").value)){ 
+				this.value = document.getElementById("aUnits").value;
+				}
+				if ( parseInt(this.value) < 1) this.value = 1;
+				
+				document.getElementById("aUnitsLTOrange").value = this.value;
+				document.getElementById("aUnitsLU").value = "";
+				document.getElementById("limitUpTo").checked = true;
+			});
+			
+			document.getElementById("aUnitsLU").addEventListener('input', function (evt) {
+				if ( parseInt(this.value) > parseInt(document.getElementById("aUnits").value)){ 
+				this.value = document.getElementById("aUnits").value;
+				}
+				if ( parseInt(this.value) < 1) this.value = 1;
+				
+				document.getElementById("aUnitsLUrange").value = this.value;
+				document.getElementById("aUnitsLTO").value = "";
+				document.getElementById("limitUse").checked = true;
+			});
 
-			setInterval(function() { getData(); }, 1500); //1500mSeconds update rate
+					
+			function sim() {
+				var out = document.getElementById("out");
+				
+				var sAttc = parseInt(document.getElementById("aUnits").value);
+				var aDice = document.getElementById("aDice").checked ;
+				var aPlus = document.getElementById("aPlus").checked ;
+				var attackLimitTo = parseInt(document.getElementById("aUnitsLTO").value);
+				var attackLimitUnits = parseInt(document.getElementById("aUnitsLU").value);
+				
+				var sDeff = parseInt(document.getElementById("dUnits").value);
+				var dDice = document.getElementById("dDice").checked ;
+				var dPlus = document.getElementById("dPlus").checked ;
+				
+				var deff = sDeff;
+				var attc = sAttc;
+				
+				noLimit = document.getElementById("noLimit").checked;
+				limitUpTo = document.getElementById("limitUpTo").checked;
+				limitUse = document.getElementById("limitUse").checked;
+				
+				if (noLimit){
+					attackLimitTo = 0
+					attackLimitUnits = 0
+				}
+				else if (limitUpTo){
+					attackLimitUnits = 0
+				}
+				else if (limitUse){
+					attackLimitTo = 0
+				}
+								
+				if (attackLimitTo != 0 ) {
+					attc -= attackLimitTo - 1;
+				}
+				else if (attackLimitUnits != 0) {
+					attc = attackLimitUnits + 1;
+				}
+				var aloss = 0;
+				var dloss = 0;
+				
+				w = 0
+				s = ""
+				while (w < 10000) {
+					if (attc <= 1){ 
+						if (attackLimitTo != 0 || attackLimitUnits != 0){
+							s += "Limmit Stop<br>";
+						}
+						else{ 
+							s += "Defender Won<br>";
+						}
+						s += 'a: '+(sAttc-aloss)+'(lost: -'+aloss+')<br>';
+						s += 'd: '+(sDeff-dloss)+'(lost: -'+dloss+')<br>';
+						console.log(s)
+						break;
+					}
+					if (deff <= 0){
+						s += "Attacker Won<br>"
+						s += 'a: '+(sAttc-aloss)+'(lost: -'+aloss+')<br>';
+						s += 'd: '+(sDeff-dloss)+'(lost: -'+dloss+')<br>';
+						console.log(s)
+						break;
+					}
 
-			function updateUI(id){
-				var xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					  document.getElementById(id).innerHTML = this.responseText;
+					dDeff = (deff > 1)? 2 : 1 ;
+					dRoll = dDeff + dDice;
+					aAttc = (attc > 3) ? 3 : ((attc > 2) ? 2 : 1);
+					aRoll =  aAttc + aDice;
+
+					fight = Math.min(dDeff,aAttc);
+					
+					dRolls = [];
+					for ( let i = 0; i < dRoll; i++) dRolls[i] = Math.ceil(Math.random()*6);
+					dRolls.sort().reverse();
+					
+					aRolls = [];
+					for ( let i = 0; i < aRoll; i++) aRolls[i] = Math.ceil(Math.random()*6);
+					aRolls.sort().reverse();
+					
+					//console.log(fight, attc, deff)
+					//console.log(dRolls,aRolls)
+					
+					dRolls[0] += dPlus;
+					aRolls[0] += aPlus;
+					for(let i = 0; i < fight; i++){
+						if (dRolls[i] >= aRolls[i]){
+							attc -= 1;
+							aloss += 1;
+						}
+						else{
+							deff -= 1;
+							dloss += 1;
+						}
 					}
-				};
-				xhttp.open("GET", "read"+id, true);
-				xhttp.send();
-			}
-			
-			countDown = new Date().getTime()+100;
-			function getTimer(){
-				var xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-					  countDown = new Date().getTime() + parseInt(this.responseText);
-					}
-				};
-				xhttp.open("GET", "readTimer", true);
-				xhttp.send();
-			}
-			
-			function getData() {
-				updateUI("temp");
-				updateUI("humi");
-				updateUI("heatIndex");
-				updateUI("heating");
-				getTimer();
-			}
-			
-			(function () {
-				const second = 1000,
-				minute = second * 60,
-				hour = minute * 60;
-			 
-				x = setInterval(function () {
-					let now = new Date().getTime(),
-					distance = countDown - now;
-					if (distance >= 0) {
-					(document.getElementById("minutes").innerText = Math.floor(
-						(distance % hour) / minute)),
-					(document.getElementById("seconds").innerText = Math.floor(
-						(distance % minute) / second));
-					}
-				}, 0);
-			})();
+					w++;
+				}
+				
+				out.innerHTML = s;
+			};
 		</script>
 	</body>
 </html>
