@@ -148,7 +148,12 @@
 		<br>
 		<br>
 		<div class="box" style="font-size:4vh">
-			<span id="out">Won</span>
+			<span id="out"></span>
+		</div>
+		<br>
+		<br>
+		<div class="box" style="font-size:4vh">
+			<span id="hist"></span>
 		</div>
 		<br>
 		<br>
@@ -278,6 +283,7 @@
 				
 				w = 0
 				s = ""
+				h = ""
 				while (w < 10000) {
 					if (attc <= 1){ 
 						if (attackLimitTo != 0 || attackLimitUnits != 0){
@@ -316,7 +322,8 @@
 					
 					//console.log(fight, attc, deff)
 					//console.log(dRolls,aRolls)
-					
+					s += "ile walczy: " + fight + " wojska atk: " + attc + " wojska def: " + deff + "<br>"
+					s += "rzuty atk: " + aRolls + " rzuty def: " + dRolls + " <br>"  
 					dRolls[0] += dPlus;
 					aRolls[0] += aPlus;
 					for(let i = 0; i < fight; i++){
