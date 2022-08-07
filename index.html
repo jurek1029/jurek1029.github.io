@@ -322,10 +322,11 @@
 					
 					//console.log(fight, attc, deff)
 					//console.log(dRolls,aRolls)
-					s += "ile walczy: " + fight + " wojska atk: " + attc + " wojska def: " + deff + "<br>"
-					s += "rzuty atk: " + aRolls + " rzuty def: " + dRolls + " <br>"  
 					dRolls[0] += dPlus;
 					aRolls[0] += aPlus;
+					s += "ile walczy: " + fight + " wojska atk: " + attc + " wojska def: " + deff + "<br>"
+					s += "rzuty atk: " + aRolls + " rzuty def: " + dRolls + " <br>"  
+
 					for(let i = 0; i < fight; i++){
 						if (dRolls[i] >= aRolls[i]){
 							attc -= 1;
