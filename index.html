@@ -43,6 +43,7 @@
 				color:#ffffff;
 				font-family:Arial;
 				font-size:40px;
+				width:
 				padding:10px 20px;
 				text-shadow:0px 1px 0px #263666;
 			}
@@ -74,14 +75,25 @@
 			}		
 			li {
 				display: inline-block;
-				font-size: 20px;
+				font-size: 2.5vh;
 				list-style-type: none;
 				<!--padding: 1em;-->
 				<!--text-transform: uppercase;-->
 			}
-			li span {
-				display: block;
-				font-size: 25px;
+			
+			input[type='checkbox'] {
+				width:2vh;
+				height:2vh;
+			}
+			input[type='radio'] {
+				width:2vh;
+				height:2vh;
+			}
+			input{
+				font-size: 2.5vh
+			}
+			img {
+				width: 100%
 			}
 		</style>
 	</head>
@@ -96,8 +108,10 @@
 		<div class="box">
 		<form id="form1">
 		<ul>
-		  <li style="width:8em">Attacker Units:</li>
-		  <li><input type="number" id="aUnits" style="width:40px" value="10"></li>
+		  <li style="width:19vh">Attacker Units:</li>
+		  <li><input type="number" id="aUnits" style="width:100px" value="10"></li>
+		</ul>
+		<ul style="text-align:center">
 		  <li>Attack Dice: <input type="checkbox" id="aDice"></li>
 		  <li>Airport: <input type="checkbox" id="aPlus"></li>	  
 		</ul>
@@ -107,21 +121,23 @@
 		</ul>
 		<ul>
 			<input type="radio" name="limit" id="limitUpTo">
-			<li style="width:8em">Attacker Units limit UP TO:</li>
-			<li><input type="range" id="aUnitsLTOrange" style="width:150px" max="10" min="1"></li>
-			<li><input type="number" id="aUnitsLTO" style="width:40px"></li>
+			<li style="width:19vh">Attacker Units limit UP TO:</li>
+			<li><input type="range" id="aUnitsLTOrange" style="width:15vh" max="10" min="1"></li>
+			<li><input type="number" id="aUnitsLTO" style="width:70px"></li>
 		</ul>
 		<ul>
 			<input type="radio" name="limit" id="limitUse">
-			<li style="width:8em">Attacker Units limit TO USE:</li>
-			<li><input type="range" id="aUnitsLUrange" style="width:150px" max="10" min="1"></li>
-			<li><input type="number" id="aUnitsLU" style="width:40px"></li>
+			<li style="width:19vh">Attacker Units limit TO USE:</li>
+			<li><input type="range" id="aUnitsLUrange" style="width:15vh" max="10" min="1"></li>
+			<li><input type="number" id="aUnitsLU" style="width:70px"></li>
 			
 		</ul>
 		<br>
 		<ul>
 			<li style="width:8em">Deffender Units:</li>
-			<li><input type="number" id="dUnits" style="width:40px" value="10"></li>
+			<li><input type="number" id="dUnits" style="width:100px" value="10"></li>
+		</ul>
+		<ul style="text-align:center">
 			<li>Defend Dice: <input type="checkbox" id="dDice"></li>
 			<li>Airport: <input type="checkbox" id="dPlus"></li>
 		</ul>
@@ -132,7 +148,7 @@
 		<button class='button' onclick="sim()"> Simulate </button>
 		<br>
 		<br>
-		<div class="box">
+		<div class="box" style="font-size:4vh">
 			<span id="out">Won</span>
 		</div>
 		<br>
